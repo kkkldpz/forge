@@ -3,6 +3,7 @@ package tools
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -61,7 +62,7 @@ func (t *GlobTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行 glob 搜索。
-func (t *GlobTool) Call(ctx context.Context, input []byte, tuc tool.ToolUseContext) types.ToolResult {
+func (t *GlobTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
 	var args GlobInput
 	if err := tool.ParseToolInput(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析错误: %v", err), IsError: true}
@@ -121,11 +122,11 @@ func (t *GlobTool) Call(ctx context.Context, input []byte, tuc tool.ToolUseConte
 }
 
 // IsReadOnly Glob 搜索是只读操作。
-func (t *GlobTool) IsReadOnly(input []byte) bool {
+func (t *GlobTool) IsReadOnly(input json.RawMessage) bool {
 	return true
 }
 
 // IsConcurrencySafe Glob 搜索是并发安全的。
-func (t *GlobTool) IsConcurrencySafe(input []byte) bool {
+func (t *GlobTool) IsConcurrencySafe(input json.RawMessage) bool {
 	return true
 }

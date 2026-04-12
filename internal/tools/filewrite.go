@@ -3,6 +3,7 @@ package tools
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -51,7 +52,7 @@ func (t *FileWriteTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行文件写入。
-func (t *FileWriteTool) Call(ctx context.Context, input []byte, tuc tool.ToolUseContext) types.ToolResult {
+func (t *FileWriteTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
 	var args FileWriteInput
 	if err := tool.ParseToolInput(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析错误: %v", err), IsError: true}
@@ -93,11 +94,11 @@ func (t *FileWriteTool) Call(ctx context.Context, input []byte, tuc tool.ToolUse
 }
 
 // IsReadOnly 文件写入不是只读操作。
-func (t *FileWriteTool) IsReadOnly(input []byte) bool {
+func (t *FileWriteTool) IsReadOnly(input json.RawMessage) bool {
 	return false
 }
 
 // IsConcurrencySafe 文件写入不是并发安全的。
-func (t *FileWriteTool) IsConcurrencySafe(input []byte) bool {
+func (t *FileWriteTool) IsConcurrencySafe(input json.RawMessage) bool {
 	return false
 }

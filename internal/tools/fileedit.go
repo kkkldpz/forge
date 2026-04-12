@@ -3,6 +3,7 @@ package tools
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -63,7 +64,7 @@ func (t *FileEditTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行文件编辑。
-func (t *FileEditTool) Call(ctx context.Context, input []byte, tuc tool.ToolUseContext) types.ToolResult {
+func (t *FileEditTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
 	var args FileEditInput
 	if err := tool.ParseToolInput(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析错误: %v", err), IsError: true}
@@ -130,11 +131,11 @@ func (t *FileEditTool) Call(ctx context.Context, input []byte, tuc tool.ToolUseC
 }
 
 // IsReadOnly 文件编辑不是只读操作。
-func (t *FileEditTool) IsReadOnly(input []byte) bool {
+func (t *FileEditTool) IsReadOnly(input json.RawMessage) bool {
 	return false
 }
 
 // IsConcurrencySafe 文件编辑不是并发安全的。
-func (t *FileEditTool) IsConcurrencySafe(input []byte) bool {
+func (t *FileEditTool) IsConcurrencySafe(input json.RawMessage) bool {
 	return false
 }

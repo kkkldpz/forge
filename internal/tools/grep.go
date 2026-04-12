@@ -3,6 +3,7 @@ package tools
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os/exec"
 	"path/filepath"
@@ -96,7 +97,7 @@ func (t *GrepTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行 grep 搜索。
-func (t *GrepTool) Call(ctx context.Context, input []byte, tuc tool.ToolUseContext) types.ToolResult {
+func (t *GrepTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
 	var args GrepInput
 	if err := tool.ParseToolInput(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析错误: %v", err), IsError: true}
@@ -180,11 +181,11 @@ func (t *GrepTool) Call(ctx context.Context, input []byte, tuc tool.ToolUseConte
 }
 
 // IsReadOnly Grep 搜索是只读操作。
-func (t *GrepTool) IsReadOnly(input []byte) bool {
+func (t *GrepTool) IsReadOnly(input json.RawMessage) bool {
 	return true
 }
 
 // IsConcurrencySafe Grep 搜索是并发安全的。
-func (t *GrepTool) IsConcurrencySafe(input []byte) bool {
+func (t *GrepTool) IsConcurrencySafe(input json.RawMessage) bool {
 	return true
 }

@@ -3,6 +3,7 @@ package tools
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -64,7 +65,7 @@ func (t *FileReadTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行文件读取。
-func (t *FileReadTool) Call(ctx context.Context, input []byte, tuc tool.ToolUseContext) types.ToolResult {
+func (t *FileReadTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
 	var args FileReadInput
 	if err := tool.ParseToolInput(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析错误: %v", err), IsError: true}
@@ -149,11 +150,11 @@ func (t *FileReadTool) Call(ctx context.Context, input []byte, tuc tool.ToolUseC
 }
 
 // IsReadOnly 文件读取始终是只读操作。
-func (t *FileReadTool) IsReadOnly(input []byte) bool {
+func (t *FileReadTool) IsReadOnly(input json.RawMessage) bool {
 	return true
 }
 
 // IsConcurrencySafe 文件读取是并发安全的。
-func (t *FileReadTool) IsConcurrencySafe(input []byte) bool {
+func (t *FileReadTool) IsConcurrencySafe(input json.RawMessage) bool {
 	return true
 }

@@ -77,7 +77,7 @@ func (t *BashTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行 shell 命令。
-func (t *BashTool) Call(ctx context.Context, input []byte, tuc tool.ToolUseContext) types.ToolResult {
+func (t *BashTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
 	var args BashInput
 	if err := tool.ParseToolInput(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析错误: %v", err), IsError: true}
@@ -166,7 +166,7 @@ func (t *BashTool) Call(ctx context.Context, input []byte, tuc tool.ToolUseConte
 }
 
 // IsConcurrencySafe 判断是否可以并发执行。
-func (t *BashTool) IsConcurrencySafe(input []byte) bool {
+func (t *BashTool) IsConcurrencySafe(input json.RawMessage) bool {
 	var args BashInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return false
@@ -206,7 +206,7 @@ func (t *BashTool) IsConcurrencySafe(input []byte) bool {
 }
 
 // IsReadOnly 判断是否为只读操作。
-func (t *BashTool) IsReadOnly(input []byte) bool {
+func (t *BashTool) IsReadOnly(input json.RawMessage) bool {
 	var args BashInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return false
