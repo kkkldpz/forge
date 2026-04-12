@@ -4,9 +4,11 @@ package engine
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
 	"github.com/google/uuid"
 	"github.com/kkkldpz/forge/internal/api"
+	promptctx "github.com/kkkldpz/forge/internal/context"
 	"github.com/kkkldpz/forge/internal/query"
 	"github.com/kkkldpz/forge/internal/tool"
 	"github.com/kkkldpz/forge/internal/types"
@@ -14,32 +16,57 @@ import (
 
 // QueryEngineConfig 是查询引擎的配置。
 type QueryEngineConfig struct {
-	Cwd              string
-	Tools            []tool.Tool
-	APIClient        *api.Client
-	SystemPrompt     []api.SystemBlock
-	Model            string
-	ThinkingConfig   *api.ThinkingConfig
-	MaxTurns         int
-	MaxBudgetUSD     float64
+	Cwd            string
+	HomeDir        string
+	Tools          []tool.Tool
+	APIClient      *api.Client
+	Model          string
+	ThinkingConfig *api.ThinkingConfig
+	MaxTurns       int
+	MaxBudgetUSD   float64
 }
 
 // QueryEngine 是对话引擎。
 type QueryEngine struct {
-	config      QueryEngineConfig
-	messages    []types.Message
-	sessionID   string
-	totalUsage  api.Usage
-	totalCost   float64
-	cancelFunc  context.CancelFunc
+	config        QueryEngineConfig
+	messages      []types.Message
+	sessionID     string
+	totalUsage    api.Usage
+	totalCost     float64
+	cancelFunc    context.CancelFunc
+	systemPrompt  []api.SystemBlock
 }
 
-// NewQueryEngine 创建新的查询引擎。
+// NewQueryEngine 创建新的查询引擎，自动构建系统提示词和上下文。
 func NewQueryEngine(config QueryEngineConfig) *QueryEngine {
+	// 收集已启用的工具名称
+	enabledTools := make([]string, 0, len(config.Tools))
+	for _, t := range config.Tools {
+		enabledTools = append(enabledTools, t.Name())
+	}
+
+	// 获取完整上下文
+	promptParts, userCtx, sysCtx := promptctx.FetchContext(
+		config.Model,
+		config.Cwd,
+		config.HomeDir,
+		enabledTools,
+	)
+
+	// 组装最终 SystemBlock 列表
+	systemBlocks := promptctx.BuildSystemBlocks(promptParts, userCtx, sysCtx)
+
+	slog.Info("查询引擎初始化完成",
+		"model", config.Model,
+		"systemBlocks", len(systemBlocks),
+		"tools", len(config.Tools),
+	)
+
 	return &QueryEngine{
-		config:    config,
-		messages:  make([]types.Message, 0),
-		sessionID: uuid.New().String(),
+		config:       config,
+		messages:     make([]types.Message, 0),
+		sessionID:    uuid.New().String(),
+		systemPrompt: systemBlocks,
 	}
 }
 
@@ -64,10 +91,9 @@ func (e *QueryEngine) SubmitMessage(ctx context.Context, prompt string) <-chan q
 	go func() {
 		defer close(ch)
 
-		// 调用 query
 		params := query.QueryParams{
 			Messages:       e.messages,
-			SystemPrompt:   e.config.SystemPrompt,
+			SystemPrompt:   e.systemPrompt,
 			Tools:          e.config.Tools,
 			ToolUseContext: tool.ToolUseContext{WorkingDir: e.config.Cwd},
 			APIClient:      e.config.APIClient,
