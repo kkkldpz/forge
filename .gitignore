@@ -34,3 +34,6 @@ build/
 # Environment
 .env
 .env.local
+
+.claude
+.mcp.json
