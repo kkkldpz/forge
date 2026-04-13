@@ -36,6 +36,8 @@ build/
 .env.local
 
 ref/
+plan/
 
+CLAUDE.md
 .claude
 .mcp.json
