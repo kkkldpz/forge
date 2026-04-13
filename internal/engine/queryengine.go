@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/kkkldpz/forge/internal/api"
 	promptctx "github.com/kkkldpz/forge/internal/context"
+	"github.com/kkkldpz/forge/internal/provider"
 	"github.com/kkkldpz/forge/internal/query"
 	"github.com/kkkldpz/forge/internal/tool"
 	"github.com/kkkldpz/forge/internal/types"
@@ -19,7 +20,7 @@ type QueryEngineConfig struct {
 	Cwd            string
 	HomeDir        string
 	Tools          []tool.Tool
-	APIClient      *api.Client
+	Provider       provider.Provider
 	Model          string
 	ThinkingConfig *api.ThinkingConfig
 	MaxTurns       int
@@ -96,7 +97,7 @@ func (e *QueryEngine) SubmitMessage(ctx context.Context, prompt string) <-chan q
 			SystemPrompt:   e.systemPrompt,
 			Tools:          e.config.Tools,
 			ToolUseContext: tool.ToolUseContext{WorkingDir: e.config.Cwd},
-			APIClient:      e.config.APIClient,
+			Provider:       e.config.Provider,
 			MaxTurns:       e.config.MaxTurns,
 			MaxBudgetUSD:   e.config.MaxBudgetUSD,
 			Model:          e.config.Model,

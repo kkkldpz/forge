@@ -10,10 +10,10 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 
-	"github.com/kkkldpz/forge/internal/api"
 	"github.com/kkkldpz/forge/internal/config"
 	promptctx "github.com/kkkldpz/forge/internal/context"
 	"github.com/kkkldpz/forge/internal/engine"
+	"github.com/kkkldpz/forge/internal/provider"
 	"github.com/kkkldpz/forge/internal/query"
 	"github.com/kkkldpz/forge/internal/tui"
 	"github.com/kkkldpz/forge/internal/tool"
@@ -55,13 +55,11 @@ func runChat(cmd *cobra.Command, args []string) error {
 		model = "claude-sonnet-4-6"
 	}
 
-	// 创建 API 客户端
-	apiKey := cfg.Global.APIKey
-	if apiKey == "" {
-		return fmt.Errorf("未配置 API Key，请设置 ANTHROPIC_API_KEY 环境变量或在 ~/.forge/settings.json 中配置")
+	// 创建 Provider
+	prov, err := provider.GetProvider(cfg)
+	if err != nil {
+		return fmt.Errorf("创建 Provider 失败: %w", err)
 	}
-
-	apiClient := api.NewClient(apiKey, cfg.Global.BaseURL, model)
 
 	// 注册工具
 	toolRegistry := tool.NewRegistry()
@@ -78,12 +76,12 @@ func runChat(cmd *cobra.Command, args []string) error {
 
 	// 创建 QueryEngine
 	qe := engine.NewQueryEngine(engine.QueryEngineConfig{
-		Cwd:       cwd,
-		HomeDir:   homeDir,
-		Tools:     allTools,
-		APIClient: apiClient,
-		Model:     model,
-		MaxTurns:  50,
+		Cwd:      cwd,
+		HomeDir:  homeDir,
+		Tools:    allTools,
+		Provider: prov,
+		Model:    model,
+		MaxTurns: 50,
 	})
 
 	// 设置 TUI 回调

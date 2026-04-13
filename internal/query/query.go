@@ -8,6 +8,7 @@ import (
 	"log/slog"
 
 	"github.com/kkkldpz/forge/internal/api"
+	"github.com/kkkldpz/forge/internal/provider"
 	"github.com/kkkldpz/forge/internal/tool"
 	"github.com/kkkldpz/forge/internal/types"
 )
@@ -18,7 +19,7 @@ type QueryParams struct {
 	SystemPrompt   []api.SystemBlock
 	Tools          []tool.Tool
 	ToolUseContext tool.ToolUseContext
-	APIClient      *api.Client
+	Provider       provider.Provider
 	MaxTurns       int
 	MaxBudgetUSD   float64
 	Model          string
@@ -104,7 +105,7 @@ func executeTurn(ctx context.Context, state *queryState, params QueryParams, ch 
 	logger.Debug("发送请求到 API", "messageCount", len(apiMessages))
 
 	// 调用 API
-	streamCh := params.APIClient.QueryModel(ctx, apiMessages, params.SystemPrompt, toolsParams, opts)
+	streamCh := params.Provider.QueryModel(ctx, apiMessages, params.SystemPrompt, toolsParams, opts)
 
 	// 处理流响应
 	processor := NewStreamProcessor()

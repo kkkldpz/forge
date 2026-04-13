@@ -11,16 +11,17 @@ import (
 
 // GlobalConfig 用户级配置，来自 ~/.forge/settings.json。
 type GlobalConfig struct {
-	APIKey      string           `json:"apiKey,omitempty"`
-	BaseURL     string           `json:"baseUrl,omitempty"`
-	DefaultModel string          `json:"defaultModel,omitempty"`
-	HaikuModel  string           `json:"haikuModel,omitempty"`
-	SonnetModel string           `json:"sonnetModel,omitempty"`
-	OpusModel   string           `json:"opusModel,omitempty"`
-	Theme       string           `json:"theme,omitempty"`
-	Permissions PermissionConfig `json:"permissions,omitempty"`
-	MCPServers  map[string]any   `json:"mcpServers,omitempty"`
-	Plugins     map[string]any   `json:"plugins,omitempty"`
+	APIKey       string           `json:"apiKey,omitempty"`
+	BaseURL      string           `json:"baseUrl,omitempty"`
+	DefaultModel string           `json:"defaultModel,omitempty"`
+	ModelType    string           `json:"modelType,omitempty"`    // "anthropic","openai","gemini","grok","bedrock","vertex","foundry"
+	HaikuModel   string           `json:"haikuModel,omitempty"`
+	SonnetModel  string           `json:"sonnetModel,omitempty"`
+	OpusModel    string           `json:"opusModel,omitempty"`
+	Theme        string           `json:"theme,omitempty"`
+	Permissions  PermissionConfig `json:"permissions,omitempty"`
+	MCPServers   map[string]any   `json:"mcpServers,omitempty"`
+	Plugins      map[string]any   `json:"plugins,omitempty"`
 }
 
 // ProjectConfig 项目级配置，来自 .forge/settings.json。
@@ -117,11 +118,32 @@ func (l *Loader) applyEnvOverrides(cfg *Config) {
 	}
 	// OpenAI 兼容模式环境变量
 	if v := os.Getenv("CLAUDE_CODE_USE_OPENAI"); v == "1" {
+		cfg.Global.ModelType = "openai"
 		if v := os.Getenv("OPENAI_API_KEY"); v != "" {
 			cfg.Global.APIKey = v
 		}
 		if v := os.Getenv("OPENAI_BASE_URL"); v != "" {
 			cfg.Global.BaseURL = v
 		}
+	// Gemini 兼容模式
+	if v := os.Getenv("CLAUDE_CODE_USE_GEMINI"); v == "1" {
+		cfg.Global.ModelType = "gemini"
 	}
+	// Grok 兼容模式
+	if v := os.Getenv("CLAUDE_CODE_USE_GROK"); v == "1" {
+		cfg.Global.ModelType = "grok"
+	}
+	// AWS Bedrock
+	if v := os.Getenv("CLAUDE_CODE_USE_BEDROCK"); v == "1" {
+		cfg.Global.ModelType = "bedrock"
+	}
+	// Google Vertex
+	if v := os.Getenv("CLAUDE_CODE_USE_VERTEX"); v == "1" {
+		cfg.Global.ModelType = "vertex"
+	}
+	// Azure Foundry
+	if v := os.Getenv("CLAUDE_CODE_USE_FOUNDRY"); v == "1" {
+		cfg.Global.ModelType = "foundry"
+	}
+}
 }
