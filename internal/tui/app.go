@@ -11,6 +11,7 @@ import (
 	"github.com/charmbracelet/bubbles/viewport"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/kkkldpz/forge/internal/api"
+	"github.com/kkkldpz/forge/internal/permission"
 )
 
 // ChatMsg 表示聊天中的一条消息。
@@ -26,6 +27,7 @@ type ChatMsg struct {
 type PermissionRequest struct {
 	ToolName string
 	Input    string
+	Decision permission.PermissionDecision
 }
 
 // appState 表示 TUI 应用状态。
@@ -208,11 +210,12 @@ func (m *Model) EndStreaming() {
 }
 
 // ShowPermission 显示权限请求对话框。
-func (m *Model) ShowPermission(toolName, input string) {
+func (m *Model) ShowPermission(toolName, input string, decision permission.PermissionDecision) {
 	m.state = stateWaitingPermission
 	m.permissionRequest = &PermissionRequest{
 		ToolName: toolName,
 		Input:    input,
+	Decision: decision,
 	}
 	m.scrollToBottom()
 }
@@ -306,9 +309,14 @@ func (m *Model) renderPermission() string {
 	}
 
 	var sb strings.Builder
+	reason := ""
+	if m.permissionRequest != nil && m.permissionRequest.Decision.Message != "" {
+		reason = fmt.Sprintf("\n原因: %s", m.permissionRequest.Decision.Message)
+	}
 	sb.WriteString(permDialogStyle.Render(
 		fmt.Sprintf("工具调用请求: %s\n\n", m.permissionRequest.ToolName) +
 			toolResultStyle.Render(m.permissionRequest.Input) +
+			reason +
 			"\n\n" +
 			permAllowStyle.Render("[Y] 允许") + "  " +
 			permDenyStyle.Render("[N] 拒绝") + "  " +

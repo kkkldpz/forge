@@ -5,6 +5,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/bubbles/spinner"
+	"github.com/kkkldpz/forge/internal/permission"
 )
 
 // streamChunkMsg 表示从 API 收到的文本块。
@@ -29,8 +30,9 @@ type usageMsg struct {
 
 // permissionMsg 表示需要权限确认。
 type permissionMsg struct {
-	ToolName string
-	Input    string
+	ToolName  string
+	Input     string
+	Decision permission.PermissionDecision
 }
 
 // Update 处理所有消息，返回更新后的模型和命令。
@@ -140,7 +142,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 
 	case permissionMsg:
-		m.ShowPermission(msg.ToolName, msg.Input)
+	m.ShowPermission(msg.ToolName, msg.Input, msg.Decision)
 		return m, nil
 
 	case spinner.TickMsg:
