@@ -48,6 +48,9 @@ type ToolUseContext struct {
 	// WorkingDir 工作目录
 	WorkingDir string
 
+	// HomeDir 用户主目录
+	HomeDir string
+
 	// Debug 是否启用调试输出
 	Debug bool
 
@@ -59,6 +62,13 @@ type ToolUseContext struct {
 
 	// Tools 当前可用的所有工具列表
 	Tools []Tool
+
+	// Provider API Provider 实例，agent 工具用于创建子 engine。
+	// 类型为 any，消费方通过类型断言获取 provider.Provider。
+	Provider any
+
+	// Model 当前使用的模型名称
+	Model string
 }
 
 // CallResult 表示工具调用的结果。
