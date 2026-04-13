@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  forge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VERSION: ${VERSION:-dev}
+        COMMIT: ${COMMIT:-unknown}
+        DATE: ${DATE:-unknown}
+    image: ghcr.io/kkkldpz/forge:${VERSION:-latest}
+    container_name: forge
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - FORGE_CONFIG_DIR=/app/.forge
+      - FORGE_DATA_DIR=/app/.config/forge
+    volumes:
+      - forge-config:/app/.forge
+      - forge-data:/app/.config/forge
+      - .:/workspace:ro
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    networks:
+      - forge-network
+
+  forge-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VERSION: ${VERSION:-dev}
+        COMMIT: ${COMMIT:-unknown}
+        DATE: ${DATE:-unknown}
+    image: ghcr.io/kkkldpz/forge:${VERSION:-latest}
+    container_name: forge-server
+    command: ["server", "start"]
+    ports:
+      - "18789:18789"
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - FORGE_CONFIG_DIR=/app/.forge
+      - FORGE_DATA_DIR=/app/.config/forge
+    volumes:
+      - forge-config:/app/.forge
+      - forge-data:/app/.config/forge
+    restart: unless-stopped
+    networks:
+      - forge-network
+
+volumes:
+  forge-config:
+    driver: local
+  forge-data:
+    driver: local
+
+networks:
+  forge-network:
+    driver: bridge

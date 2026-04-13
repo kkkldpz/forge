@@ -1,0 +1,53 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Build outputs
+dist/
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test artifacts
+*.test
+*.out
+coverage.txt
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+tmp/
+temp/
+
+# Environment
+.env
+.env.*
+
+# Dependencies (already in vendor or downloaded)
+vendor/
+node_modules/
+
+# Release files
+releases/
+
+# goreleaser
+.goreleaser.yaml
+!</.goreleaser.yaml

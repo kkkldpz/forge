@@ -1,0 +1,129 @@
+project_name: forge
+
+archives:
+  - id: archive
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - README.md
+      - LICENSE
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+checksum:
+  name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
+  algorithm: sha256
+
+dist: dist
+
+release:
+  github:
+    owner: kkkldpz
+    name: forge
+  draft: true
+  prerelease: auto
+  name_template: "{{ .Tag }}"
+
+blobs:
+  - provider: github
+    bucket: "{{ .Env.FORGE_BUCKET }}"
+    folder: "{{ .ProjectName }}/{{ .Version }}"
+
+env_files:
+  github_token: "{{ .Env.GITHUB_TOKEN }}"
+
+cross: true
+
+builds:
+  - id: forge
+    main: .
+    binary: forge
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+      - armv7
+    goarm:
+      - v7
+    ldflags:
+      - -s -w
+      - -X github.com/kkkldpz/forge/internal/version.Version={{ .Version }}
+      - -X github.com/kkkldpz/forge/internal/version.Commit={{ .Commit }}
+      - -X github.com/kkkldpz/forge/internal/version.Date={{ .Date }}
+    hooks:
+      post: |
+        if [ "$GOOS" = "windows" ]; then
+          mv "{{ .Binary }}.exe" "{{ .Name }}.exe"
+        fi
+
+nfpms:
+  - id: deb
+    package_name: forge
+    vendor: Forge
+    homepage: https://github.com/kkkldpz/forge
+    maintainer: Forge Team
+    description: AI-powered CLI assistant
+    license: MIT
+    formats:
+      - deb
+    depends:
+      - git
+    recommends:
+      - ripgrep
+    section: tools
+    priority: optional
+    arch: "{{ .Arch }}"
+    overwrites: true
+    files:
+      "dist/forge_linux_amd64/forge": "/usr/bin/forge"
+    config_files:
+      - etc/forge/config.yaml: /etc/forge/config.yaml
+
+  - id: rpm
+    package_name: forge
+    vendor: Forge
+    homepage: https://github.com/kkkldpz/forge
+    maintainer: Forge Team
+    description: AI-powered CLI assistant
+    license: MIT
+    formats:
+      - rpm
+    depends:
+      - git
+    recommends:
+      - ripgrep
+    arch: "{{ .Arch }}"
+    overwrites: true
+    files:
+      "dist/forge_linux_amd64/forge": "/usr/bin/forge"
+    config_files:
+      - etc/forge/config.yaml: /etc/forge/config.yaml
+
+dockers:
+  - image_templates:
+      - "ghcr.io/kkkldpz/forge:{{ .Tag }}"
+      - "ghcr.io/kkkldpz/forge:latest"
+      - "docker.io/kkkldpz/forge:{{ .Tag }}"
+      - "docker.io/kkkldpz/forge:latest"
+    build_flag_templates:
+      - "--build-arg=TAG={{ .Tag }}"
+      - "--build-arg=COMMIT={{ .Commit }}"
+      - "--build-arg=DATE={{ .Date }}"
+      - "--platform=linux/{{ .Arch }}"
+    goos: linux
+    goarch: "{{ .Arch }}"
+
+docker_manifests:
+  - image_templates:
+      - "ghcr.io/kkkldpz/forge:latest"
+      - "docker.io/kkkldpz/forge:latest"
+    skip_push: false
