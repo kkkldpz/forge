@@ -9,13 +9,13 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 // FileReadTool 读取文件内容。
 type FileReadTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 // FileReadInput FileRead 工具的输入参数。
@@ -29,7 +29,7 @@ type FileReadInput struct {
 // NewFileReadTool 创建新的文件读取工具实例。
 func NewFileReadTool() *FileReadTool {
 	return &FileReadTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "file_read",
 			DescriptionStr: "读取文件内容，支持行号偏移和行数限制",
 		},
@@ -65,9 +65,9 @@ func (t *FileReadTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行文件读取。
-func (t *FileReadTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *FileReadTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args FileReadInput
-	if err := tool.ParseToolInput(input, &args); err != nil {
+	if err := toolkit.ParseToolInput(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析错误: %v", err), IsError: true}
 	}
 

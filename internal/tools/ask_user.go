@@ -6,17 +6,17 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type AskUserTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewAskUserTool() *AskUserTool {
 	return &AskUserTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "ask_user",
 			DescriptionStr: "向用户提问并等待回答。",
 		},
@@ -44,7 +44,7 @@ func (t *AskUserTool) InputSchema() types.ToolInputJSONSchema {
 	return schema
 }
 
-func (t *AskUserTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *AskUserTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args AskUserInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析失败: %v", err), IsError: true}
@@ -69,12 +69,12 @@ func (t *AskUserTool) IsReadOnly(input json.RawMessage) bool  { return true }
 func (t *AskUserTool) IsConcurrencySafe(input json.RawMessage) bool { return true }
 
 type SleepTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewSleepTool() *SleepTool {
 	return &SleepTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "sleep",
 			DescriptionStr: "暂停执行指定时间。",
 		},
@@ -95,7 +95,7 @@ func (t *SleepTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *SleepTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *SleepTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args SleepInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析失败: %v", err), IsError: true}

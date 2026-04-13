@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 )
 
 func TestWebFetchTool_InputSchema(t *testing.T) {
@@ -26,7 +26,7 @@ func TestWebFetchTool_InputSchema(t *testing.T) {
 func TestWebFetchTool_Call_InvalidURL(t *testing.T) {
 	webTool := NewWebFetchTool()
 	input := `{"url":""}`
-	result := webTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{WorkingDir: "/tmp"})
+	result := webTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{WorkingDir: "/tmp"})
 
 	if !result.IsError {
 		t.Error("Expected error for empty URL")
@@ -36,7 +36,7 @@ func TestWebFetchTool_Call_InvalidURL(t *testing.T) {
 func TestWebFetchTool_Call_LocalhostURL(t *testing.T) {
 	webTool := NewWebFetchTool()
 	input := `{"url":"http://localhost:8080/test"}`
-	result := webTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{WorkingDir: "/tmp"})
+	result := webTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{WorkingDir: "/tmp"})
 
 	if !result.IsError {
 		t.Error("Expected error for localhost URL")
@@ -61,7 +61,7 @@ func TestWebSearchTool_InputSchema(t *testing.T) {
 func TestWebSearchTool_Call_EmptyQuery(t *testing.T) {
 	webTool := NewWebSearchTool()
 	input := `{"query":""}`
-	result := webTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{WorkingDir: "/tmp"})
+	result := webTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{WorkingDir: "/tmp"})
 
 	if !result.IsError {
 		t.Error("Expected error for empty query")

@@ -1,3 +1,4 @@
+// Package openai 实现 OpenAI 兼容 API 的流式适配器。
 package openai
 
 import (

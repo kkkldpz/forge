@@ -7,17 +7,17 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type NotebookEditTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewNotebookEditTool() *NotebookEditTool {
 	return &NotebookEditTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "notebook_edit",
 			DescriptionStr: "编辑 Jupyter notebook 文件",
 		},
@@ -44,7 +44,7 @@ func (t *NotebookEditTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *NotebookEditTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *NotebookEditTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args NotebookEditInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析失败: %v", err), IsError: true}

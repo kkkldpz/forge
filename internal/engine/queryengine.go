@@ -11,7 +11,7 @@ import (
 	promptctx "github.com/kkkldpz/forge/internal/context"
 	"github.com/kkkldpz/forge/internal/provider"
 	"github.com/kkkldpz/forge/internal/query"
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
@@ -19,7 +19,7 @@ import (
 type QueryEngineConfig struct {
 	Cwd            string
 	HomeDir        string
-	Tools          []tool.Tool
+	Tools          []toolkit.Tool
 	Provider       provider.Provider
 	Model          string
 	ThinkingConfig *api.ThinkingConfig
@@ -96,7 +96,7 @@ func (e *QueryEngine) SubmitMessage(ctx context.Context, prompt string) <-chan q
 			Messages:       e.messages,
 			SystemPrompt:   e.systemPrompt,
 			Tools:          e.config.Tools,
-			ToolUseContext: tool.ToolUseContext{WorkingDir: e.config.Cwd},
+			ToolUseContext: toolkit.ToolUseContext{WorkingDir: e.config.Cwd},
 			Provider:       e.config.Provider,
 			MaxTurns:       e.config.MaxTurns,
 			MaxBudgetUSD:   e.config.MaxBudgetUSD,

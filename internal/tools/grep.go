@@ -10,13 +10,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 // GrepTool 使用 ripgrep 搜索文件内容。
 type GrepTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 // GrepInput Grep 工具的输入参数。
@@ -36,7 +36,7 @@ type GrepInput struct {
 // NewGrepTool 创建新的 Grep 工具实例。
 func NewGrepTool() *GrepTool {
 	return &GrepTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "grep",
 			DescriptionStr: "使用 ripgrep 搜索文件内容",
 		},
@@ -97,9 +97,9 @@ func (t *GrepTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行 grep 搜索。
-func (t *GrepTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *GrepTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args GrepInput
-	if err := tool.ParseToolInput(input, &args); err != nil {
+	if err := toolkit.ParseToolInput(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析错误: %v", err), IsError: true}
 	}
 

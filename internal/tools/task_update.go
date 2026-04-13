@@ -6,19 +6,19 @@ import (
 	"fmt"
 
 	"github.com/kkkldpz/forge/internal/task"
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 // TaskUpdateTool 更新异步任务状态。
 type TaskUpdateTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 // NewTaskUpdateTool 创建新的 TaskUpdate 工具。
 func NewTaskUpdateTool() *TaskUpdateTool {
 	return &TaskUpdateTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "task_update",
 			DescriptionStr: "更新异步任务的状态、进度或结果。",
 		},
@@ -39,7 +39,7 @@ func (t *TaskUpdateTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *TaskUpdateTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *TaskUpdateTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args struct {
 		ID          string `json:"id"`
 		Title       string `json:"title"`

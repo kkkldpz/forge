@@ -1,3 +1,4 @@
+// Package config 实现分层配置加载和 feature flag 管理。
 package config
 
 import (

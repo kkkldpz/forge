@@ -8,17 +8,17 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/kkkldpz/forge/internal/cron"
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type CronCreateTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewCronCreateTool() *CronCreateTool {
 	return &CronCreateTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "cron_create",
 			DescriptionStr: "创建一个新的定时任务",
 		},
@@ -43,7 +43,7 @@ func (t *CronCreateTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *CronCreateTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *CronCreateTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args CronCreateInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析失败: %v", err), IsError: true}

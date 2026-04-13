@@ -5,17 +5,17 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type PlanVerifyTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewPlanVerifyTool() *PlanVerifyTool {
 	return &PlanVerifyTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "plan_verify",
 			DescriptionStr: "验证计划执行结果是否符合预期。",
 		},
@@ -42,7 +42,7 @@ func (t *PlanVerifyTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *PlanVerifyTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *PlanVerifyTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args PlanVerifyInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析失败: %v", err), IsError: true}

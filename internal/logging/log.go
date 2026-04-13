@@ -1,3 +1,4 @@
+// Package logging 封装 slog 日志功能，提供统一的日志初始化。
 package logging
 
 import (

@@ -13,14 +13,14 @@ import (
 	"github.com/kkkldpz/forge/internal/api"
 	"github.com/kkkldpz/forge/internal/engine"
 	"github.com/kkkldpz/forge/internal/provider"
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 // AgentTool 实现子代理执行工具。
 // 通过创建独立的 QueryEngine 实例运行子任务。
 type AgentTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 	mu      sync.RWMutex
 	agents  map[string]*AgentRun
 	results map[string]*AgentResult
@@ -62,7 +62,7 @@ type AgentInput struct {
 
 func NewAgentTool() *AgentTool {
 	return &AgentTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "agent",
 			DescriptionStr: "启动子代理独立执行复杂任务，子代理运行在独立的对话循环中并拥有完整的工具访问权限",
 		},
@@ -87,7 +87,7 @@ func (t *AgentTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *AgentTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *AgentTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args AgentInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析失败: %v", err), IsError: true}
@@ -144,8 +144,8 @@ func (t *AgentTool) runSync(
 	args AgentInput,
 	prov provider.Provider,
 	model string,
-	subTools []tool.Tool,
-	tuc tool.ToolUseContext,
+	subTools []toolkit.Tool,
+	tuc toolkit.ToolUseContext,
 ) types.ToolResult {
 	logger := slog.Default().With("component", "agent", "agent_id", run.ID, "agent_name", run.Name)
 
@@ -240,8 +240,8 @@ func (t *AgentTool) runAsync(
 	args AgentInput,
 	prov provider.Provider,
 	model string,
-	subTools []tool.Tool,
-	tuc tool.ToolUseContext,
+	subTools []toolkit.Tool,
+	tuc toolkit.ToolUseContext,
 ) types.ToolResult {
 	agentCtx, cancel := context.WithCancel(ctx)
 	run.cancel = cancel
@@ -359,8 +359,8 @@ func (t *AgentTool) IsReadOnly(input json.RawMessage) bool      { return false }
 func (t *AgentTool) IsConcurrencySafe(input json.RawMessage) bool { return false }
 
 // filterToolsForSubAgent 从子代理的工具列表中排除 agent 工具，防止无限嵌套。
-func filterToolsForSubAgent(tools []tool.Tool) []tool.Tool {
-	filtered := make([]tool.Tool, 0, len(tools))
+func filterToolsForSubAgent(tools []toolkit.Tool) []toolkit.Tool {
+	filtered := make([]toolkit.Tool, 0, len(tools))
 	for _, t := range tools {
 		if t.Name() != "agent" {
 			filtered = append(filtered, t)

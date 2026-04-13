@@ -16,7 +16,7 @@ import (
 	"github.com/kkkldpz/forge/internal/provider"
 	"github.com/kkkldpz/forge/internal/query"
 	"github.com/kkkldpz/forge/internal/tui"
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/tools"
 )
 
@@ -62,7 +62,7 @@ func runChat(cmd *cobra.Command, args []string) error {
 	}
 
 	// 注册工具
-	toolRegistry := tool.NewRegistry()
+	toolRegistry := toolkit.NewRegistry()
 	toolRegistry.Register(tools.NewBashTool())
 	toolRegistry.Register(tools.NewFileReadTool())
 	toolRegistry.Register(tools.NewFileWriteTool())
@@ -155,7 +155,7 @@ func processQuery(ctx context.Context, m *tui.Model, qe *engine.QueryEngine, pro
 }
 
 // 注入工具名称的辅助函数
-func getToolNames(tools []tool.Tool) []string {
+func getToolNames(tools []toolkit.Tool) []string {
 	names := make([]string, len(tools))
 	for i, t := range tools {
 		names[i] = t.Name()
@@ -164,7 +164,7 @@ func getToolNames(tools []tool.Tool) []string {
 }
 
 // collectEnabledTools 收集已启用工具的名称。
-func collectEnabledTools(tools []tool.Tool) []string {
+func collectEnabledTools(tools []toolkit.Tool) []string {
 	return getToolNames(tools)
 }
 

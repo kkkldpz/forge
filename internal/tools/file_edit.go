@@ -9,13 +9,13 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 // FileEditTool 通过精确字符串替换编辑文件。
 type FileEditTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 // FileEditInput FileEdit 工具的输入参数。
@@ -29,7 +29,7 @@ type FileEditInput struct {
 // NewFileEditTool 创建新的文件编辑工具实例。
 func NewFileEditTool() *FileEditTool {
 	return &FileEditTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "file_edit",
 			DescriptionStr: "通过精确字符串替换编辑文件",
 		},
@@ -64,9 +64,9 @@ func (t *FileEditTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行文件编辑。
-func (t *FileEditTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *FileEditTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args FileEditInput
-	if err := tool.ParseToolInput(input, &args); err != nil {
+	if err := toolkit.ParseToolInput(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析错误: %v", err), IsError: true}
 	}
 

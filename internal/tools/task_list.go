@@ -7,17 +7,17 @@ import (
 	"strings"
 
 	"github.com/kkkldpz/forge/internal/task"
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type TaskListTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewTaskListTool() *TaskListTool {
 	return &TaskListTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "task_list",
 			DescriptionStr: "列出所有任务或按状态筛选。",
 		},
@@ -37,7 +37,7 @@ func (t *TaskListTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *TaskListTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *TaskListTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args struct {
 		Status string `json:"status"`
 	}

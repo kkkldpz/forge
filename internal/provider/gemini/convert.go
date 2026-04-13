@@ -1,3 +1,4 @@
+// Package gemini 实现 Google Gemini API 的流式适配器。
 package gemini
 
 import (

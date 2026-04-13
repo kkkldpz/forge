@@ -1,3 +1,4 @@
+// Package perf 实现性能监控和指标收集。
 package perf
 
 import (

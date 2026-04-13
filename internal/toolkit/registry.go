@@ -1,5 +1,5 @@
-// Package tool 提供工具注册和管理功能。
-package tool
+// Package toolkit 提供工具注册和管理功能。
+package toolkit
 
 import (
 	"encoding/json"
@@ -23,24 +23,24 @@ func NewRegistry() *Registry {
 }
 
 // Register 注册一个工具。
-func (r *Registry) Register(tool Tool) {
-	if tool == nil {
+func (r *Registry) Register(t Tool) {
+	if t == nil {
 		return
 	}
-	r.tools[tool.Name()] = tool
+	r.tools[t.Name()] = t
 }
 
 // Get 根据名称获取工具。
 func (r *Registry) Get(name string) (Tool, bool) {
-	tool, ok := r.tools[name]
-	return tool, ok
+	t, ok := r.tools[name]
+	return t, ok
 }
 
 // All 返回所有已注册的工具列表。
 func (r *Registry) All() []Tool {
 	list := make([]Tool, 0, len(r.tools))
-	for _, tool := range r.tools {
-		list = append(list, tool)
+	for _, t := range r.tools {
+		list = append(list, t)
 	}
 	// 按名称排序，保证输出稳定
 	sort.Slice(list, func(i, j int) bool {
@@ -52,9 +52,9 @@ func (r *Registry) All() []Tool {
 // AllEnabled 返回所有启用的工具。
 func (r *Registry) AllEnabled() []Tool {
 	list := make([]Tool, 0)
-	for _, tool := range r.tools {
-		if tool.IsEnabled() {
-			list = append(list, tool)
+	for _, t := range r.tools {
+		if t.IsEnabled() {
+			list = append(list, t)
 		}
 	}
 	sort.Slice(list, func(i, j int) bool {
@@ -71,8 +71,8 @@ func (r *Registry) FilterByFeatureFlags() []Tool {
 		baseTools := []string{"bash", "file_read", "file_edit"}
 		filtered := make([]Tool, 0, len(baseTools))
 		for _, name := range baseTools {
-			if tool, ok := r.Get(name); ok && tool.IsEnabled() {
-				filtered = append(filtered, tool)
+			if t, ok := r.Get(name); ok && t.IsEnabled() {
+				filtered = append(filtered, t)
 			}
 		}
 		return filtered
@@ -89,9 +89,9 @@ func (r *Registry) FilterByDenyRules(denyList []string) []Tool {
 	}
 
 	list := make([]Tool, 0)
-	for _, tool := range r.tools {
-		if !denySet[tool.Name()] && tool.IsEnabled() {
-			list = append(list, tool)
+	for _, t := range r.tools {
+		if !denySet[t.Name()] && t.IsEnabled() {
+			list = append(list, t)
 		}
 	}
 	sort.Slice(list, func(i, j int) bool {
@@ -103,11 +103,11 @@ func (r *Registry) FilterByDenyRules(denyList []string) []Tool {
 // ToParams 将工具列表转换为 API 请求参数格式。
 func ToParams(tools []Tool) []map[string]any {
 	params := make([]map[string]any, 0, len(tools))
-	for _, tool := range tools {
-		schema := tool.InputSchema()
+	for _, t := range tools {
+		schema := t.InputSchema()
 		params = append(params, map[string]any{
-			"name":         tool.Name(),
-			"description":  tool.Description(),
+			"name":         t.Name(),
+			"description":  t.Description(),
 			"input_schema": schema,
 		})
 	}
@@ -120,8 +120,8 @@ type ToolConstructor func() Tool
 // RegisterTools 批量注册工具。
 func RegisterTools(r *Registry, constructors ...ToolConstructor) {
 	for _, ctor := range constructors {
-		if tool := ctor(); tool != nil {
-			r.Register(tool)
+		if t := ctor(); t != nil {
+			r.Register(t)
 		}
 	}
 }

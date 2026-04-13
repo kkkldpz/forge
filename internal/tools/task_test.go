@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/kkkldpz/forge/internal/task"
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 )
 
 func TestTaskGetTool(t *testing.T) {
@@ -23,7 +23,7 @@ func TestTaskGetTool(t *testing.T) {
 	}
 
 	input := `{"id":"test-task-123"}`
-	result := tkTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{WorkingDir: "/tmp"})
+	result := tkTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{WorkingDir: "/tmp"})
 
 	if result.IsError {
 		t.Errorf("Expected no error, got: %s", result.Content)
@@ -41,7 +41,7 @@ func TestTaskListTool(t *testing.T) {
 	}
 
 	input := `{}`
-	result := tkTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{WorkingDir: "/tmp"})
+	result := tkTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{WorkingDir: "/tmp"})
 
 	if result.IsError {
 		t.Errorf("Expected no error, got: %s", result.Content)
@@ -62,7 +62,7 @@ func TestTaskStopTool(t *testing.T) {
 	}
 
 	input := `{"id":"stop-task-456"}`
-	result := tkTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{WorkingDir: "/tmp"})
+	result := tkTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{WorkingDir: "/tmp"})
 
 	if result.IsError {
 		t.Errorf("Expected no error, got: %s", result.Content)
@@ -72,7 +72,7 @@ func TestTaskStopTool(t *testing.T) {
 func TestTaskGetTool_NotFound(t *testing.T) {
 	tkTool := NewTaskGetTool()
 	input := `{"id":"non-existent-id"}`
-	result := tkTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{WorkingDir: "/tmp"})
+	result := tkTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{WorkingDir: "/tmp"})
 
 	if !result.IsError {
 		t.Error("Expected error for non-existent task")
@@ -89,7 +89,7 @@ func TestTaskListTool_FilterByStatus(t *testing.T) {
 
 	tkTool := NewTaskListTool()
 	input := `{"status":"pending"}`
-	result := tkTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{WorkingDir: "/tmp"})
+	result := tkTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{WorkingDir: "/tmp"})
 
 	if result.IsError {
 		t.Errorf("Expected no error, got: %s", result.Content)
@@ -103,7 +103,7 @@ func TestTaskCreateTool(t *testing.T) {
 	}
 
 	input := `{"title":"新任务"}`
-	result := tkTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{WorkingDir: "/tmp"})
+	result := tkTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{WorkingDir: "/tmp"})
 
 	if result.IsError {
 		t.Errorf("Expected no error, got: %s", result.Content)
@@ -120,7 +120,7 @@ func TestTaskUpdateTool(t *testing.T) {
 
 	tkTool := NewTaskUpdateTool()
 	input := `{"id":"update-task-001","title":"新标题","status":"completed"}`
-	result := tkTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{WorkingDir: "/tmp"})
+	result := tkTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{WorkingDir: "/tmp"})
 
 	if result.IsError {
 		t.Errorf("Expected no error, got: %s", result.Content)

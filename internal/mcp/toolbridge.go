@@ -6,14 +6,14 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 // MCPTool 将 MCP 服务器上的工具适配为 Forge 工具接口。
 // 工具名称格式: mcp__{server}__{tool}
 type MCPTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 
 	// server 关联的 MCP 服务器名称
 	server string
@@ -28,7 +28,7 @@ func NewMCPTool(server string, toolDef ToolDef, client *Client) *MCPTool {
 	name := fmt.Sprintf("mcp__%s__%s", server, toolDef.Name)
 
 	return &MCPTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        name,
 			DescriptionStr: toolDef.Description,
 		},
@@ -83,7 +83,7 @@ func (t *MCPTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行 MCP 工具调用。
-func (t *MCPTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *MCPTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	result, err := t.mcpClient.CallTool(ctx, t.mcpToolName(), input)
 	if err != nil {
 		return types.ToolResult{

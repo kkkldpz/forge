@@ -5,17 +5,17 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type LSPTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewLSPTool() *LSPTool {
 	return &LSPTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "lsp",
 			DescriptionStr: "与 Language Server Protocol (LSP) 通信",
 		},
@@ -46,7 +46,7 @@ func (t *LSPTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *LSPTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *LSPTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args LSPInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析失败: %v", err), IsError: true}

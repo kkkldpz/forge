@@ -1,5 +1,5 @@
 // Package tool 定义工具系统的核心接口和执行框架。
-package tool
+package toolkit
 
 import (
 	"context"

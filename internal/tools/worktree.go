@@ -6,17 +6,17 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type WorktreeEnterTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewWorktreeEnterTool() *WorktreeEnterTool {
 	return &WorktreeEnterTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "worktree_enter",
 			DescriptionStr: "进入 Git worktree 工作目录",
 		},
@@ -39,7 +39,7 @@ func (t *WorktreeEnterTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *WorktreeEnterTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *WorktreeEnterTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args WorktreeEnterInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析失败: %v", err), IsError: true}
@@ -64,12 +64,12 @@ func (t *WorktreeEnterTool) IsReadOnly(input json.RawMessage) bool { return fals
 func (t *WorktreeEnterTool) IsConcurrencySafe(input json.RawMessage) bool { return false }
 
 type WorktreeExitTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewWorktreeExitTool() *WorktreeExitTool {
 	return &WorktreeExitTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "worktree_exit",
 			DescriptionStr: "退出 Git worktree 工作目录",
 		},
@@ -90,7 +90,7 @@ func (t *WorktreeExitTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *WorktreeExitTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *WorktreeExitTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args WorktreeExitInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析失败: %v", err), IsError: true}

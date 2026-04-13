@@ -7,19 +7,19 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/kkkldpz/forge/internal/task"
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 // TaskCreateTool 创建异步任务。
 type TaskCreateTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 // NewTaskCreateTool 创建新的 TaskCreate 工具。
 func NewTaskCreateTool() *TaskCreateTool {
 	return &TaskCreateTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "task_create",
 			DescriptionStr: "创建一个新的异步任务，用于跟踪工作进度。",
 		},
@@ -37,7 +37,7 @@ func (t *TaskCreateTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *TaskCreateTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *TaskCreateTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args struct {
 		Title       string `json:"title"`
 		Description string `json:"description"`

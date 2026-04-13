@@ -5,17 +5,17 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type MCPProxyTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewMCPProxyTool() *MCPProxyTool {
 	return &MCPProxyTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "mcp_proxy",
 			DescriptionStr: "通过 MCP 协议代理工具调用",
 		},
@@ -40,7 +40,7 @@ func (t *MCPProxyTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *MCPProxyTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *MCPProxyTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args MCPProxyInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析失败: %v", err), IsError: true}

@@ -10,18 +10,18 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type WebFetchTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 	httpClient *http.Client
 }
 
 func NewWebFetchTool() *WebFetchTool {
 	return &WebFetchTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "webfetch",
 			DescriptionStr: "获取网页内容",
 		},
@@ -46,7 +46,7 @@ func (t *WebFetchTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *WebFetchTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *WebFetchTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args WebFetchInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析失败: %v", err), IsError: true}

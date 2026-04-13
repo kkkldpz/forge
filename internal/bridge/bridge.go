@@ -1,3 +1,4 @@
+// Package bridge 实现远程控制桥接服务器，支持 WebSocket 双向通信和消息路由。
 package bridge
 
 import (

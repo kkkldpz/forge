@@ -150,7 +150,7 @@ func buildDoingTasksSection(enabledTools []string) string {
 	// 任务管理工具引导
 	if hasTool(enabledTools, "TaskCreate") {
 		items = append(items,
-			"Break down and manage your work with the TaskCreate tool. These tools are helpful for planning your work and helping the user track your progress. Mark each task as completed as soon as you are done with the task. Do not batch up multiple tasks before marking them as completed.",
+			"Break down and manage your work with the TaskCreate toolkit. These tools are helpful for planning your work and helping the user track your progress. Mark each task as completed as soon as you are done with the task. Do not batch up multiple tasks before marking them as completed.",
 		)
 	}
 
@@ -195,7 +195,7 @@ func buildUsingToolsSection(enabledTools []string) string {
 	// 任务管理
 	if hasTool(enabledTools, "TaskCreate") {
 		items = append(items,
-			"Break down and manage your work with the TaskCreate tool. These tools are helpful for planning your work and helping the user track your progress. Mark each task as completed as soon as you are done with the task. Do not batch up multiple tasks before marking them as completed.",
+			"Break down and manage your work with the TaskCreate toolkit. These tools are helpful for planning your work and helping the user track your progress. Mark each task as completed as soon as you are done with the task. Do not batch up multiple tasks before marking them as completed.",
 		)
 	}
 

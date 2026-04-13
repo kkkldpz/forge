@@ -10,13 +10,13 @@ import (
 	"time"
 
 	"github.com/bmatcuk/doublestar/v4"
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 // GlobTool 使用 glob 模式搜索文件。
 type GlobTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 // GlobInput Glob 工具的输入参数。
@@ -36,7 +36,7 @@ type GlobOutput struct {
 // NewGlobTool 创建新的 Glob 工具实例。
 func NewGlobTool() *GlobTool {
 	return &GlobTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "glob",
 			DescriptionStr: "使用 glob 模式搜索文件",
 		},
@@ -62,9 +62,9 @@ func (t *GlobTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行 glob 搜索。
-func (t *GlobTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *GlobTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args GlobInput
-	if err := tool.ParseToolInput(input, &args); err != nil {
+	if err := toolkit.ParseToolInput(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析错误: %v", err), IsError: true}
 	}
 

@@ -1,3 +1,4 @@
+// Package plugin 实现插件发现、加载和管理。
 package plugin
 
 import (

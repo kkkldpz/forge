@@ -1,3 +1,4 @@
+// Package cli 定义所有 Cobra 命令行子命令。
 package cli
 
 import (

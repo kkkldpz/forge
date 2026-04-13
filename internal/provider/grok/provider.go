@@ -1,3 +1,4 @@
+// Package grok 实现 xAI Grok API 的流式适配器。
 package grok
 
 import (

@@ -6,17 +6,17 @@ import (
 	"fmt"
 
 	"github.com/kkkldpz/forge/internal/task"
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type TaskStopTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewTaskStopTool() *TaskStopTool {
 	return &TaskStopTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "task_stop",
 			DescriptionStr: "取消正在运行的任务。",
 		},
@@ -33,7 +33,7 @@ func (t *TaskStopTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *TaskStopTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *TaskStopTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args struct {
 		ID string `json:"id"`
 	}

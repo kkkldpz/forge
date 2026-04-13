@@ -1,5 +1,5 @@
-// Package tool 提供工具执行和并发控制。
-package tool
+// Package toolkit 提供工具执行和并发控制。
+package toolkit
 
 import (
 	"context"
@@ -18,9 +18,9 @@ type ToolCall struct {
 
 // ToolCallResult 表示工具调用的执行结果。
 type ToolCallResult struct {
-	CallID  string
-	Result  types.ToolResult
-	Error   error
+	CallID string
+	Result types.ToolResult
+	Error  error
 }
 
 // ExecuteTools 批量执行工具调用。
@@ -33,8 +33,8 @@ func ExecuteTools(
 ) []ToolCallResult {
 	// 建立工具名称到工具的映射
 	toolMap := make(map[string]Tool)
-	for _, tool := range tools {
-		toolMap[tool.Name()] = tool
+	for _, t := range tools {
+		toolMap[t.Name()] = t
 	}
 
 	// 按并发安全性分组
@@ -42,14 +42,14 @@ func ExecuteTools(
 	unsafeCalls := make([]ToolCall, 0)
 
 	for _, call := range calls {
-		tool, ok := toolMap[call.Name]
+		t, ok := toolMap[call.Name]
 		if !ok {
 			// 工具不存在，作为不安全处理（会报错）
 			unsafeCalls = append(unsafeCalls, call)
 			continue
 		}
 
-		if tool.IsConcurrencySafe(call.Input) {
+		if t.IsConcurrencySafe(call.Input) {
 			safeCalls = append(safeCalls, call)
 		} else {
 			unsafeCalls = append(unsafeCalls, call)
@@ -75,7 +75,7 @@ func ExecuteTools(
 			default:
 			}
 
-			tool, ok := toolMap[c.Name]
+			t, ok := toolMap[c.Name]
 			if !ok {
 				resultChan <- ToolCallResult{
 					CallID: c.ID,
@@ -84,7 +84,7 @@ func ExecuteTools(
 				return
 			}
 
-			result := tool.Call(ctx, c.Input, tuc)
+			result := t.Call(ctx, c.Input, tuc)
 			resultChan <- ToolCallResult{
 				CallID: c.ID,
 				Result: result,
@@ -115,7 +115,7 @@ func ExecuteTools(
 		default:
 		}
 
-		tool, ok := toolMap[call.Name]
+		t, ok := toolMap[call.Name]
 		if !ok {
 			results = append(results, ToolCallResult{
 				CallID: call.ID,
@@ -124,7 +124,7 @@ func ExecuteTools(
 			continue
 		}
 
-		result := tool.Call(ctx, call.Input, tuc)
+		result := t.Call(ctx, call.Input, tuc)
 		results = append(results, ToolCallResult{
 			CallID: call.ID,
 			Result: result,
@@ -147,7 +147,7 @@ func ExecuteTools(
 func ExecuteSingleTool(
 	ctx context.Context,
 	call ToolCall,
-	tool Tool,
+	t Tool,
 	tuc ToolUseContext,
 ) ToolCallResult {
 	select {
@@ -159,7 +159,7 @@ func ExecuteSingleTool(
 	default:
 	}
 
-	result := tool.Call(ctx, call.Input, tuc)
+	result := t.Call(ctx, call.Input, tuc)
 	return ToolCallResult{
 		CallID: call.ID,
 		Result: result,
@@ -169,8 +169,8 @@ func ExecuteSingleTool(
 // ValidateToolInput 验证工具输入。
 func ValidateToolInput(
 	ctx context.Context,
-	tool Tool,
+	t Tool,
 	input []byte,
 ) types.ValidationResult {
-	return tool.ValidateInput(ctx, input)
+	return t.ValidateInput(ctx, input)
 }

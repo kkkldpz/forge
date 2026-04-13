@@ -6,17 +6,17 @@ import (
 	"fmt"
 
 	"github.com/kkkldpz/forge/internal/task"
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type TaskGetTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewTaskGetTool() *TaskGetTool {
 	return &TaskGetTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "task_get",
 			DescriptionStr: "获取指定任务的详细信息。",
 		},
@@ -33,7 +33,7 @@ func (t *TaskGetTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *TaskGetTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *TaskGetTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args struct {
 		ID string `json:"id"`
 	}

@@ -5,17 +5,17 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type PlanEnterTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewPlanEnterTool() *PlanEnterTool {
 	return &PlanEnterTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "plan_enter",
 			DescriptionStr: "进入计划模式，用于详细规划和验证复杂任务的执行步骤。",
 		},
@@ -32,7 +32,7 @@ func (t *PlanEnterTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *PlanEnterTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *PlanEnterTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args struct {
 		Goal string `json:"goal"`
 	}

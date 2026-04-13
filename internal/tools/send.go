@@ -5,17 +5,17 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 type SendTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 func NewSendTool() *SendTool {
 	return &SendTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "send",
 			DescriptionStr: "发送消息到外部服务或通道",
 		},
@@ -38,7 +38,7 @@ func (t *SendTool) InputSchema() types.ToolInputJSONSchema {
 	}
 }
 
-func (t *SendTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *SendTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args SendInput
 	if err := json.Unmarshal(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析失败: %v", err), IsError: true}

@@ -1,3 +1,4 @@
+// Package version 管理版本信息。
 package version
 
 import (

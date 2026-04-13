@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
@@ -36,7 +36,7 @@ func TestAgentTool_InputSchema(t *testing.T) {
 func TestAgentTool_EmptyPrompt(t *testing.T) {
 	at := NewAgentTool()
 
-	result := at.Call(context.Background(), json.RawMessage(`{}`), tool.ToolUseContext{})
+	result := at.Call(context.Background(), json.RawMessage(`{}`), toolkit.ToolUseContext{})
 	if !result.IsError {
 		t.Error("Empty prompt should return error")
 	}
@@ -45,7 +45,7 @@ func TestAgentTool_EmptyPrompt(t *testing.T) {
 func TestAgentTool_InvalidJSON(t *testing.T) {
 	at := NewAgentTool()
 
-	result := at.Call(context.Background(), json.RawMessage(`invalid`), tool.ToolUseContext{})
+	result := at.Call(context.Background(), json.RawMessage(`invalid`), toolkit.ToolUseContext{})
 	if !result.IsError {
 		t.Error("Invalid JSON should return error")
 	}
@@ -56,7 +56,7 @@ func TestAgentTool_NoProvider(t *testing.T) {
 
 	result := at.Call(context.Background(),
 		json.RawMessage(`{"prompt":"do something"}`),
-		tool.ToolUseContext{},
+		toolkit.ToolUseContext{},
 	)
 	if !result.IsError {
 		t.Error("Missing provider should return error")
@@ -72,7 +72,7 @@ func TestAgentTool_BackgroundMode(t *testing.T) {
 	// Background mode with no real provider should still start and fail gracefully
 	result := at.Call(context.Background(),
 		json.RawMessage(`{"prompt":"test task","run_in_background":true}`),
-		tool.ToolUseContext{},
+		toolkit.ToolUseContext{},
 	)
 
 	// Should fail because no provider
@@ -133,7 +133,7 @@ func TestAgentTool_GetResult_NotFound(t *testing.T) {
 }
 
 func TestFilterToolsForSubAgent(t *testing.T) {
-	tools := []tool.Tool{
+	tools := []toolkit.Tool{
 		&mockTool{name: "bash"},
 		&mockTool{name: "agent"},
 		&mockTool{name: "file_read"},
@@ -189,7 +189,7 @@ type mockTool struct {
 func (m *mockTool) Name() string                                          { return m.name }
 func (m *mockTool) Description() string                                   { return "mock" }
 func (m *mockTool) InputSchema() types.ToolInputJSONSchema                { return types.ToolInputJSONSchema{} }
-func (m *mockTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (m *mockTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	return types.ToolResult{Content: "mock result"}
 }
 func (m *mockTool) ValidateInput(ctx context.Context, input json.RawMessage) types.ValidationResult {

@@ -1,3 +1,4 @@
+// Package daemon 实现长驻守护进程模式和 worker 注册。
 package daemon
 
 import (

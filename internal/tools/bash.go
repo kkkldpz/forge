@@ -9,13 +9,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 // BashTool 执行 shell 命令。
 type BashTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 // BashInput Bash 工具的输入参数。
@@ -39,7 +39,7 @@ type BashOutput struct {
 // NewBashTool 创建新的 Bash 工具实例。
 func NewBashTool() *BashTool {
 	return &BashTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "bash",
 			DescriptionStr: "执行 shell 命令",
 		},
@@ -77,9 +77,9 @@ func (t *BashTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行 shell 命令。
-func (t *BashTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *BashTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args BashInput
-	if err := tool.ParseToolInput(input, &args); err != nil {
+	if err := toolkit.ParseToolInput(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析错误: %v", err), IsError: true}
 	}
 

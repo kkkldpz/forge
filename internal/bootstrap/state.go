@@ -1,3 +1,4 @@
+// Package bootstrap 管理会话全局状态，包括 sessionID、工作目录和费用追踪。
 package bootstrap
 
 import (

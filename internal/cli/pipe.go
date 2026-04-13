@@ -12,7 +12,7 @@ import (
 	"github.com/kkkldpz/forge/internal/config"
 	"github.com/kkkldpz/forge/internal/engine"
 	"github.com/kkkldpz/forge/internal/provider"
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/tools"
 )
 
@@ -70,7 +70,7 @@ func runPipe(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("创建 Provider 失败: %w", err)
 	}
 
-	toolRegistry := tool.NewRegistry()
+	toolRegistry := toolkit.NewRegistry()
 	toolRegistry.Register(tools.NewBashTool())
 	toolRegistry.Register(tools.NewFileReadTool())
 	toolRegistry.Register(tools.NewFileWriteTool())

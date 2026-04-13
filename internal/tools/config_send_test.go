@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 )
 
 func TestConfigTool_Name(t *testing.T) {
@@ -31,7 +31,7 @@ func TestConfigTool_InputSchema(t *testing.T) {
 func TestConfigTool_Call_List(t *testing.T) {
 	cfgTool := NewConfigTool()
 	input := `{"action":"list"}`
-	result := cfgTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{})
+	result := cfgTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{})
 
 	if result.IsError {
 		t.Errorf("Expected no error, got: %s", result.Content)
@@ -41,7 +41,7 @@ func TestConfigTool_Call_List(t *testing.T) {
 func TestConfigTool_Call_Get(t *testing.T) {
 	cfgTool := NewConfigTool()
 	input := `{"action":"get","key":"default_model"}`
-	result := cfgTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{})
+	result := cfgTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{})
 
 	if result.IsError {
 		t.Errorf("Expected no error, got: %s", result.Content)
@@ -51,7 +51,7 @@ func TestConfigTool_Call_Get(t *testing.T) {
 func TestConfigTool_Call_Get_UnknownKey(t *testing.T) {
 	cfgTool := NewConfigTool()
 	input := `{"action":"get","key":"unknown_key"}`
-	result := cfgTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{})
+	result := cfgTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{})
 
 	if !result.IsError {
 		t.Error("Expected error for unknown key")
@@ -61,7 +61,7 @@ func TestConfigTool_Call_Get_UnknownKey(t *testing.T) {
 func TestConfigTool_Call_Set(t *testing.T) {
 	cfgTool := NewConfigTool()
 	input := `{"action":"set","key":"verbose","value":"true"}`
-	result := cfgTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{})
+	result := cfgTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{})
 
 	if result.IsError {
 		t.Errorf("Expected no error, got: %s", result.Content)
@@ -109,7 +109,7 @@ func TestSendTool_InputSchema(t *testing.T) {
 func TestSendTool_Call(t *testing.T) {
 	sendTool := NewSendTool()
 	input := `{"channel":"test-channel","message":"hello"}`
-	result := sendTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{})
+	result := sendTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{})
 
 	if result.IsError {
 		t.Errorf("Expected no error, got: %s", result.Content)
@@ -119,7 +119,7 @@ func TestSendTool_Call(t *testing.T) {
 func TestSendTool_Call_EmptyChannel(t *testing.T) {
 	sendTool := NewSendTool()
 	input := `{"channel":"","message":"hello"}`
-	result := sendTool.Call(context.Background(), json.RawMessage(input), tool.ToolUseContext{})
+	result := sendTool.Call(context.Background(), json.RawMessage(input), toolkit.ToolUseContext{})
 
 	if !result.IsError {
 		t.Error("Expected error for empty channel")

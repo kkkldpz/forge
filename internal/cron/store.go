@@ -1,3 +1,4 @@
+// Package cron 实现定时任务的存储和调度。
 package cron
 
 import (

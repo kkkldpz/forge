@@ -1,3 +1,4 @@
+// Package types 定义核心数据类型，包括消息、权限、流事件和工具相关类型。
 package types
 
 // SessionID 唯一标识一个 Forge 会话。

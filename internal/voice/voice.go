@@ -1,3 +1,4 @@
+// Package voice 实现语音模式的音频捕获和识别。
 package voice
 
 import (

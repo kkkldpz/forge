@@ -8,13 +8,13 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/kkkldpz/forge/internal/tool"
+	"github.com/kkkldpz/forge/internal/toolkit"
 	"github.com/kkkldpz/forge/internal/types"
 )
 
 // FileWriteTool 创建或覆写文件。
 type FileWriteTool struct {
-	tool.BaseTool
+	toolkit.BaseTool
 }
 
 // FileWriteInput FileWrite 工具的输入参数。
@@ -26,7 +26,7 @@ type FileWriteInput struct {
 // NewFileWriteTool 创建新的文件写入工具实例。
 func NewFileWriteTool() *FileWriteTool {
 	return &FileWriteTool{
-		BaseTool: tool.BaseTool{
+		BaseTool: toolkit.BaseTool{
 			NameStr:        "file_write",
 			DescriptionStr: "创建新文件或覆写已有文件",
 		},
@@ -52,9 +52,9 @@ func (t *FileWriteTool) InputSchema() types.ToolInputJSONSchema {
 }
 
 // Call 执行文件写入。
-func (t *FileWriteTool) Call(ctx context.Context, input json.RawMessage, tuc tool.ToolUseContext) types.ToolResult {
+func (t *FileWriteTool) Call(ctx context.Context, input json.RawMessage, tuc toolkit.ToolUseContext) types.ToolResult {
 	var args FileWriteInput
-	if err := tool.ParseToolInput(input, &args); err != nil {
+	if err := toolkit.ParseToolInput(input, &args); err != nil {
 		return types.ToolResult{Content: fmt.Sprintf("参数解析错误: %v", err), IsError: true}
 	}
 
