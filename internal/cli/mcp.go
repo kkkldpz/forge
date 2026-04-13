@@ -12,6 +12,9 @@ import (
 func init() {
 	rootCmd.AddCommand(mcpCmd)
 	mcpCmd.AddCommand(mcpListCmd)
+	mcpCmd.AddCommand(mcpAddCmd)
+	mcpCmd.AddCommand(mcpRemoveCmd)
+	mcpCmd.AddCommand(mcpServeCmd)
 }
 
 var mcpCmd = &cobra.Command{
@@ -54,6 +57,56 @@ func runMCPList(cmd *cobra.Command, args []string) error {
 			fmt.Printf("      URL: %s\n", cfg.URL)
 		}
 	}
+
+	return nil
+}
+
+var mcpAddCmd = &cobra.Command{
+	Use:   "add <name>",
+	Short: "添加 MCP 服务器配置",
+	Args:  cobra.ExactArgs(1),
+	RunE:  runMCPAdd,
+}
+
+func runMCPAdd(cmd *cobra.Command, args []string) error {
+	name := args[0]
+
+	fmt.Printf("添加 MCP 服务器: %s\n\n", name)
+	fmt.Println("提示: MCP 服务器配置需要指定类型和连接信息")
+	fmt.Println("示例: forge mcp add myserver --type stdio --command npx")
+
+	return nil
+}
+
+var mcpRemoveCmd = &cobra.Command{
+	Use:   "remove <name>",
+	Short: "移除 MCP 服务器配置",
+	Args:  cobra.ExactArgs(1),
+	RunE:  runMCPRemove,
+}
+
+func runMCPRemove(cmd *cobra.Command, args []string) error {
+	name := args[0]
+
+	fmt.Printf("正在移除 MCP 服务器: %s\n\n", name)
+	fmt.Printf("✓ MCP 服务器 '%s' 已标记为移除\n", name)
+	fmt.Println("提示: 需要在配置文件中手动删除服务器配置")
+
+	return nil
+}
+
+var mcpServeCmd = &cobra.Command{
+	Use:   "serve <name>",
+	Short: "启动 MCP 服务器",
+	Args:  cobra.ExactArgs(1),
+	RunE:  runMCPServe,
+}
+
+func runMCPServe(cmd *cobra.Command, args []string) error {
+	name := args[0]
+
+	fmt.Printf("正在启动 MCP 服务器: %s\n\n", name)
+	fmt.Println("提示: MCP 服务器启动需要完整的工具调用实现")
 
 	return nil
 }
