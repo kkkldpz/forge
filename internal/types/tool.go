@@ -19,8 +19,9 @@ type ToolSchemaProperty struct {
 
 // ToolResult 是工具执行的输出结果。
 type ToolResult struct {
-	Content string `json:"content"`
-	IsError bool   `json:"isError,omitempty"`
+	Content string         `json:"content"`
+	IsError bool           `json:"isError,omitempty"`
+	Extra   map[string]any `json:"extra,omitempty"`
 }
 
 // ToolUseContext 提供工具执行所需的上下文。
